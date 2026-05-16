@@ -18,9 +18,28 @@ app = FastAPI(
     description="Prototype API for policy enquiries, KYC, and claim/fund status.",
 )
 
+
+def _build_allowed_origins(raw_origin: str) -> list[str]:
+    # Supports single origin or comma-separated origins in FRONTEND_ORIGIN.
+    values = [part.strip().rstrip("/") for part in (raw_origin or "").split(",")]
+    origins = [item for item in values if item]
+    defaults = [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "https://policychesko-frontend.vercel.app",
+    ]
+    for item in defaults:
+        if item not in origins:
+            origins.append(item)
+    return origins
+
+
+allowed_origins = _build_allowed_origins(settings.frontend_origin)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.frontend_origin, "http://localhost:5173"],
+    allow_origins=allowed_origins,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
