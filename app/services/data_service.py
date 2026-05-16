@@ -949,7 +949,6 @@ class DataService:
         start_date: str | None = None,
         end_date: str | None = None,
     ) -> dict[str, Any]:
-        self._assert_active_session(session_id, username)
         safe_page, safe_size, offset = self._normalize_pagination(page, page_size)
         start_bound, end_bound = self._date_bounds(start_date, end_date)
 
@@ -1061,7 +1060,6 @@ class DataService:
         start_date: str | None = None,
         end_date: str | None = None,
     ) -> dict[str, Any]:
-        self._assert_active_session(session_id, username)
         safe_page, safe_size, offset = self._normalize_pagination(page, page_size)
         start_bound, end_bound = self._date_bounds(start_date, end_date)
 
@@ -1117,7 +1115,6 @@ class DataService:
         }
 
     def get_wallet_summary(self, session_id: str, username: str) -> dict[str, Any]:
-        self._assert_active_session(session_id, username)
         credited = int((self._sqlite_fetchone(
             "select coalesce(sum(amount),0) from app_wallet_ledger where username = ? and entry_type = ?",
             (username, "credit"),
@@ -1220,7 +1217,6 @@ class DataService:
         }
 
     def investment_projection(self, session_id: str, username: str) -> dict[str, Any]:
-        self._assert_active_session(session_id, username)
         principal = int((self._sqlite_fetchone(
             "select coalesce(sum(amount),0) from app_investments where username = ? and status = ?",
             (username, "invested"),
@@ -1245,7 +1241,6 @@ class DataService:
         start_date: str | None = None,
         end_date: str | None = None,
     ) -> dict[str, Any]:
-        self._assert_active_session(session_id, username)
         safe_page, safe_size, offset = self._normalize_pagination(page, page_size)
         start_bound, end_bound = self._date_bounds(start_date, end_date)
 
@@ -1311,7 +1306,6 @@ class DataService:
         start_date: str | None = None,
         end_date: str | None = None,
     ) -> dict[str, Any]:
-        self._assert_active_session(session_id, username)
         safe_page, safe_size, offset = self._normalize_pagination(page, page_size)
         start_bound, end_bound = self._date_bounds(start_date, end_date)
 
